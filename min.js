@@ -11203,8 +11203,8 @@ function pemtohex(a, b) {
         a = a.replace(new RegExp("^[^]*-----BEGIN " + b + "-----"), "");
         a = a.replace(new RegExp("-----END " + b + "-----[^]*$"), "");
     } else {
-        a = a.replace(/^[^]*-----BEGIN [^-]+-----/, "");
-        a = a.replace(/-----END [^-]+-----[^]*$/, "");
+        a = a.replace("/^[^]*-----BEGIN [^-]+-----/", "");
+        a = a.replace("/-----END [^-]+-----[^]*$/", "");
     }
     return b64nltohex(a);
 }
