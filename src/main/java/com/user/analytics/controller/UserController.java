@@ -8,6 +8,7 @@ import com.user.analytics.utility.PasswordUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -18,6 +19,9 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder bcryptEncoder;
 
     @GetMapping("/getAllUsers")
     public List<User> getAllUsers(){
@@ -30,12 +34,13 @@ public class UserController {
     }
 
     @PostMapping("createUser")
-    public User createUser(@Valid @RequestBody User user){
-        String salt = PasswordUtility.getSalt(30);
-        String securedPassword =  PasswordUtility.generateSecurePassword(user.getPassword(), salt);
-        user.setSalt(salt);
-        user.setPassword(securedPassword);
-        return userRepository.save(user);
+    public ResponseEntity<?> createUser(@Valid @RequestBody User user){
+//        String salt = PasswordUtility.getSalt(30);
+//        String securedPassword =  PasswordUtility.generateSecurePassword(user.getPassword(), salt);
+//        user.setSalt(salt);
+//        user.setPassword(securedPassword);
+        user.setPassword(bcryptEncoder.encode(user.getPassword()));
+        return ResponseEntity.ok(userRepository.save(user));
     }
 
     @PostMapping("/updateUser/{id}")
@@ -54,10 +59,10 @@ public class UserController {
     @PostMapping("/userLogin")
     public User userLogin(@RequestBody User user){
         User savedUser = userRepository.findById(user.getId()).orElseThrow(()-> new ResourceNotFoundException("User", "id", user.getId()));
-        boolean checkPassword = PasswordUtility.verifyUserPassword(user.getPassword(), savedUser.getPassword(), savedUser.getSalt());
-        if(!checkPassword){
-            throw new UnauthorizedException("User", "userName", savedUser.getUserName());
-        }
+//        boolean checkPassword = PasswordUtility.verifyUserPassword(user.getPassword(), savedUser.getPassword(), savedUser.getSalt());
+//        if(!checkPassword){
+//            throw new UnauthorizedException("User", "userName", savedUser.getUserName());
+//        }
         return savedUser;
     }
 

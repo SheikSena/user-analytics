@@ -16,6 +16,7 @@ import java.util.Date;
 @Table(name="users")
 @EntityListeners(AuditingEntityListener.class)
 @JsonIgnoreProperties(value = {"createdAt", "updatedAt"}, allowGetters = true)
+@NamedQuery(name = "User.findByUserName", query = "SELECT u FROM User u WHERE  u.userName= ?1")
 public class User implements Serializable {
 
     @Id
@@ -45,9 +46,9 @@ public class User implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    @Column(nullable = false)
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String salt;
+//    @Column(nullable = false)
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+//    private String salt;
 
     public Long getId() {
         return id;
@@ -105,11 +106,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public String getSalt() {
-        return salt;
-    }
-
-    public void setSalt(String salt) {
-        this.salt = salt;
-    }
+//    public String getSalt() {
+//        return salt;
+//    }
+//
+//    public void setSalt(String salt) {
+//        this.salt = salt;
+//    }
 }
