@@ -1,8 +1,10 @@
 package com.user.analytics.configuration;
 
+import com.user.analytics.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -21,6 +23,9 @@ public class JwtTokenUtil implements Serializable {
 
     @Value("${jwt.secret}")
     private String secret;
+
+    @Autowired
+    private UserRepository userRepository;
 
     //retrieve username from jwt token
     public String getUsernameFromToken(String token) {
@@ -51,6 +56,12 @@ public class JwtTokenUtil implements Serializable {
     //generate token for user
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> claims = new HashMap<>();
+        com.user.analytics.model.User user = userRepository.findByUserName(userDetails.getUsername());
+        if(user != null){
+            claims.put("id", user.getId());
+            claims.put("firstName", user.getFirstName());
+            claims.put("lastName", user.getLastName());
+        }
         return doGenerateToken(claims, userDetails.getUsername());
     }
 

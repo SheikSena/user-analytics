@@ -46,10 +46,6 @@ public class User implements Serializable {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-//    @Column(nullable = false)
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-//    private String salt;
-
     public Long getId() {
         return id;
     }
@@ -106,11 +102,4 @@ public class User implements Serializable {
         this.password = password;
     }
 
-//    public String getSalt() {
-//        return salt;
-//    }
-//
-//    public void setSalt(String salt) {
-//        this.salt = salt;
-//    }
 }
